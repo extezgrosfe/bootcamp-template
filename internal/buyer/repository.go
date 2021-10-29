@@ -11,11 +11,11 @@ import (
 // Repository encapsulates the storage of a buyer.
 type Repository interface {
 	GetAll(ctx context.Context) ([]domain.Buyer, error)
-	Get(ctx context.Context, cardNumberID string) (domain.Buyer, error)
+	Get(ctx context.Context, id int) (domain.Buyer, error)
 	Exists(ctx context.Context, cardNumberID string) bool
 	Save(ctx context.Context, b domain.Buyer) (int, error)
 	Update(ctx context.Context, b domain.Buyer) error
-	Delete(ctx context.Context, cardNumberID string) error
+	Delete(ctx context.Context, id int) error
 }
 
 type repository struct {
@@ -45,10 +45,10 @@ func (r *repository) GetAll(ctx context.Context) ([]domain.Buyer, error) {
 	return buyers, nil
 }
 
-func (r *repository) Get(ctx context.Context, cardNumberID string) (domain.Buyer, error) {
+func (r *repository) Get(ctx context.Context, id int) (domain.Buyer, error) {
 
-	sqlStatement := `SELECT * FROM "main"."buyers" WHERE card_number_id=$1;`
-	row := r.db.QueryRow(sqlStatement, cardNumberID)
+	sqlStatement := `SELECT * FROM "main"."buyers" WHERE id=$1;`
+	row := r.db.QueryRow(sqlStatement, id)
 	b := domain.Buyer{}
 	err := row.Scan(&b.ID, &b.CardNumberID, &b.FirstName, &b.LastName)
 	if err != nil {
@@ -110,13 +110,13 @@ func (r *repository) Update(ctx context.Context, b domain.Buyer) error {
 	return nil
 }
 
-func (r *repository) Delete(ctx context.Context, cardNumberID string) error {
-	stmt, err := r.db.Prepare(`DELETE FROM "main"."buyers" WHERE card_number_id=?`)
+func (r *repository) Delete(ctx context.Context, id int) error {
+	stmt, err := r.db.Prepare(`DELETE FROM "main"."buyers" WHERE id=?`)
 	if err != nil {
 		return err
 	}
 
-	res, err := stmt.Exec(cardNumberID)
+	res, err := stmt.Exec(id)
 	if err != nil {
 		return err
 	}

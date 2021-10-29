@@ -11,11 +11,11 @@ import (
 // Repository encapsulates the storage of a employee.
 type Repository interface {
 	GetAll(ctx context.Context) ([]domain.Employee, error)
-	Get(ctx context.Context, cardNumberID string) (domain.Employee, error)
+	Get(ctx context.Context, id int) (domain.Employee, error)
 	Exists(ctx context.Context, cardNumberID string) bool
 	Save(ctx context.Context, e domain.Employee) (int, error)
 	Update(ctx context.Context, e domain.Employee) error
-	Delete(ctx context.Context, cardNumberID string) error
+	Delete(ctx context.Context, id int) error
 }
 
 type repository struct {
@@ -45,10 +45,10 @@ func (r *repository) GetAll(ctx context.Context) ([]domain.Employee, error) {
 	return employees, nil
 }
 
-func (r *repository) Get(ctx context.Context, cardNumberID string) (domain.Employee, error) {
+func (r *repository) Get(ctx context.Context, id int) (domain.Employee, error) {
 
-	sqlStatement := `SELECT * FROM "main"."employees" WHERE card_number_id=$1;`
-	row := r.db.QueryRow(sqlStatement, cardNumberID)
+	sqlStatement := `SELECT * FROM "main"."employees" WHERE id=$1;`
+	row := r.db.QueryRow(sqlStatement, id)
 	e := domain.Employee{}
 	err := row.Scan(&e.ID, &e.CardNumberID, &e.FirstName, &e.LastName, &e.WarehouseID)
 	if err != nil {
@@ -110,13 +110,13 @@ func (r *repository) Update(ctx context.Context, e domain.Employee) error {
 	return nil
 }
 
-func (r *repository) Delete(ctx context.Context, cardNumberID string) error {
-	stmt, err := r.db.Prepare(`DELETE FROM "main"."employees" WHERE card_number_id=?`)
+func (r *repository) Delete(ctx context.Context, id int) error {
+	stmt, err := r.db.Prepare(`DELETE FROM "main"."employees" WHERE id=?`)
 	if err != nil {
 		return err
 	}
 
-	res, err := stmt.Exec(cardNumberID)
+	res, err := stmt.Exec(id)
 	if err != nil {
 		return err
 	}
