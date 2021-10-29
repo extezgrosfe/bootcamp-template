@@ -1,8 +1,8 @@
 name: Bump version
 
 on:
-  push:
-    branches: [main]
+  pull_request:
+    types: [closed]
 
 jobs:
   build:
@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bump version and push tag
+        if: github.event.pull_request.merged == true
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
         with:
@@ -17,6 +18,7 @@ jobs:
           default_bump: major
           tag_prefix: sprint_
       - name: Create a GitHub release
+        if: github.event.pull_request.merged == true
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
