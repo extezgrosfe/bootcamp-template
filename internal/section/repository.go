@@ -62,10 +62,7 @@ func (r *repository) Exists(ctx context.Context, sectionNumber int) bool {
 	sqlStatement := `SELECT section_number FROM "main"."sections" WHERE section_number=$1;`
 	row := r.db.QueryRow(sqlStatement, sectionNumber)
 	err := row.Scan(&sectionNumber)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func (r *repository) Save(ctx context.Context, s domain.Section) (int, error) {

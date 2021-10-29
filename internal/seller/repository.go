@@ -62,10 +62,7 @@ func (r *repository) Exists(ctx context.Context, cid int) bool {
 	sqlStatement := `SELECT cid FROM "main"."sellers" WHERE cid=$1;`
 	row := r.db.QueryRow(sqlStatement, cid)
 	err := row.Scan(&cid)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func (r *repository) Save(ctx context.Context, s domain.Seller) (int, error) {

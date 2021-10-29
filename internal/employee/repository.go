@@ -62,10 +62,7 @@ func (r *repository) Exists(ctx context.Context, cardNumberID string) bool {
 	sqlStatement := `SELECT card_number_id FROM "main"."employees" WHERE card_number_id=$1;`
 	row := r.db.QueryRow(sqlStatement, cardNumberID)
 	err := row.Scan(&cardNumberID)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func (r *repository) Save(ctx context.Context, e domain.Employee) (int, error) {

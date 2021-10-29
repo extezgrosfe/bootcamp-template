@@ -62,10 +62,7 @@ func (r *repository) Exists(ctx context.Context, productCode string) bool {
 	sqlStatement := `SELECT product_code FROM "main"."products" WHERE product_code=$1;`
 	row := r.db.QueryRow(sqlStatement, productCode)
 	err := row.Scan(&productCode)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func (r *repository) Save(ctx context.Context, p domain.Product) (int, error) {

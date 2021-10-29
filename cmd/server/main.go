@@ -23,5 +23,7 @@ func main() {
 	// 	warehousesRoutes.DELETE("/:id", warehouseHandler.Delete())
 	// }
 
-	router.Run()
+	if err := router.Run(); err != nil {
+		panic(err)
+	}
 }
