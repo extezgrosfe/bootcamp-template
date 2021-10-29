@@ -2,11 +2,7 @@
 PACKAGES_PATH = $(shell go list -f '{{ .Dir }}' ./...)
 
 .PHONY: all
-all: check_tools ensure-deps fmt imports test
-
-.PHONY: check_tools
-check_tools:
-	@type "goimports" > /dev/null 2>&1 || echo 'Please install goimports: go get golang.org/x/tools/cmd/goimports'
+all: ensure-deps fmt imports test
 
 .PHONY: ensure-deps
 ensure-deps:
