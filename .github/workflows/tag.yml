@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bump version and push tag
-        if: github.event.pull_request.merged == true &&
+        if: github.event.pull_request.merged == true
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
         with:
