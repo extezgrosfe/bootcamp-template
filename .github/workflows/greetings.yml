@@ -6,19 +6,10 @@ on:
     branches:
       - main
 jobs:
-  pr_check:
-    runs-on: ubuntu-latest
-    name: A job to Post comment on PR
-    steps:
-      - uses: actions/checkout@v2
-      - name: PR Action
-        uses: koushikmohan1996/action-pr-gifs@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   greeting:
     runs-on: ubuntu-latest
+    name: First Comment
     permissions:
-      issues: write
       pull-requests: write
     steps:
       - uses: actions/first-interaction@v1
